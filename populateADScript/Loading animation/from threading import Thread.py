@@ -2,7 +2,6 @@ from threading import Thread
 from threading import Event
 import time
 
-# class TermLoading is from the snippet above. It is a class that creates a loading animation in the terminal.
 class TermLoading():
     def __init__(self):
         self.message = ""
@@ -75,59 +74,14 @@ class TermLoading():
             self.__threadBlockEvent.wait()
             self.__threadBlockEvent.clear()
 
-
-# The importUsernames function reads the usernames from a file and returns them as a list.
-def importUsernames(usernamefile):
-    usernames = []  # Initialize an empty list to store usernames
-    try:
-        read_file = open(usernamefile, "r") # Open the file in read mode
-        usernames = read_file.readlines()
-        read_file.close()
-
-        return usernames
-    except FileNotFoundError:
-        print(f"The file '{usernamefile}' was not found.")
-        return None  # Return None to indicate failure
-    except PermissionError:
-        print(f"Permission denied while trying to read the file '{usernamefile}'.")
-        return None  # Return None to indicate failure
-    except Exception as e:
-        print("An error occurred:", e)
-        return None  # Return None to indicate failure
-# The randomizeUsernames function takes a list of usernames and returns a new list with the usernames in random order.
-def randomizeUsernames(usernames):
-    import random
-    random.shuffle(usernames)
-    return usernames
-# The exportUsernames function writes the usernames to a file.
-def exportUsernames(usernames):
-    try:
-        write_file = open('UsernamesRandomized.txt', 'w')
-        for username in usernames:
-            write_file.write(username)
-        write_file.close()
-    except PermissionError:
-        print("Permission denied while trying to write to the file.")
-    except Exception as e:
-        print("An error occurred:", e)
-
-usernamefile = input("Enter the name of the file containing the usernames: ")
-animation: TermLoading = TermLoading()
-animation.show("Opening file...")
-time.sleep(2)
-animation.finished = True
-
-usernames = importUsernames(usernamefile)  # Assign the returned value to a variable
-if usernames:
+if __name__ == '__main__':
     animation: TermLoading = TermLoading()
-    animation.show("Randomizing usernames...")
-    time.sleep(2)
+    animation.show('loading...', finish_message='Finished!✅', failed_message='Failed!❌😨😨')
+    time.sleep(3)
+    animation.failed = True
+    # loading again
+    time.sleep(1)
+    animation.show_loading()
+    time.sleep(3)
     animation.finished = True
-    randomized_usernames = randomizeUsernames(usernames)
-    animation: TermLoading = TermLoading()
-    animation.show("Writing Randomized to new file UsernamesRandomized.txt... ")
-    time.sleep(2)
-    animation.finished = True
-    exportUsernames(randomized_usernames)
-else:
-    print("Failed to import usernames. Exiting.")
+    time.sleep(3)

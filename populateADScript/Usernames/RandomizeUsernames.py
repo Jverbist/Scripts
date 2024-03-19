@@ -86,6 +86,10 @@ def importUsernames(usernamefile):
 
         return usernames
     except FileNotFoundError:
+        animation: TermLoading = TermLoading()
+        animation.show("Opening file...")
+        time.sleep(2)
+        animation.failed= True
         print(f"The file '{usernamefile}' was not found.")
         return None  # Return None to indicate failure
     except PermissionError:
@@ -111,7 +115,7 @@ def exportUsernames(usernames):
     except Exception as e:
         print("An error occurred:", e)
 
-usernamefile = input("Enter the name of the file containing the usernames: ")
+usernamefile = input("Enter the name of the file containing the usernames(hint it is usernames.txt): ")
 animation: TermLoading = TermLoading()
 animation.show("Opening file...")
 time.sleep(2)

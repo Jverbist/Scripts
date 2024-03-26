@@ -9,6 +9,7 @@ Populate AD Script
 3. Exit
 ------------------------
 """
+
 while_bool = True
 
 
@@ -16,12 +17,11 @@ while while_bool == True:
     print(main)
     user_input = input("Enter a number: ")
     if user_input == "1":
+        # Executes RandomizeUsernames.py that randomizes usernames
         exec(open('Usernames\RandomizeUsernames.py', encoding='utf-8').read())
-        #capture_output = subprocess.run(["cat", "UsernamesRandomized.txt"], shell=True, capture_output=True, text=True)
-        #print(capture_output.stdout)
     elif user_input == "2":
+        # Executes Powershell script that populates AD
         subprocess.call(["C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "PowershellScripts\PopulateAD.ps1"])
-        #exec(open('PowershellScripts\PopulateAD.ps1', encoding='utf-8').read())
     elif user_input == "3":
         while_bool = False
     else:

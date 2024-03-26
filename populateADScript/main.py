@@ -1,5 +1,5 @@
+#import subprocess
 import subprocess
-
 # Run RandomizeUsernames.py
 main = """
 Populate AD Script
@@ -16,11 +16,12 @@ while while_bool == True:
     print(main)
     user_input = input("Enter a number: ")
     if user_input == "1":
-        exec(open('Usernames/RandomizeUsernames.py').read())
-        capture_output = subprocess.run(["cat", "UsernamesRandomized.txt"], shell=True, capture_output=True, text=True)
-        print(capture_output.stdout)
+        exec(open('Usernames\RandomizeUsernames.py', encoding='utf-8').read())
+        #capture_output = subprocess.run(["cat", "UsernamesRandomized.txt"], shell=True, capture_output=True, text=True)
+        #print(capture_output.stdout)
     elif user_input == "2":
-        exec(open('PowershellScripts/PopulateAD.ps1').read())
+        subprocess.call(["C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "PowershellScripts\PopulateAD.ps1"])
+        #exec(open('PowershellScripts\PopulateAD.ps1', encoding='utf-8').read())
     elif user_input == "3":
         while_bool = False
     else:
@@ -32,6 +33,5 @@ while while_bool == True:
 
 
 
-result = subprocess.run(["ls"], shell=True, capture_output=True, text=True)
-print(result.stdout)
+
 

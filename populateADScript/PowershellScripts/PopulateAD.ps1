@@ -24,10 +24,13 @@ function Create-ADUser {
 }
 
 # Read randomized usernames from file
-$usernames = Get-Content -Path "../UsernamesRandomized.txt"
+$usernames = Get-Content -Path "..\UsernamesRandomized.txt"
 
 # Get domain name from user input
 $Domain = Read-Host "Enter your domain name (e.g., example.com)"
+
+#Check if domain name exists on domain controller
+$DomainExists = Get-ADDomain -Identity $Domain -ErrorAction SilentlyContinue
 
 # Create users in Active Directory
 foreach ($username in $usernames) {

@@ -1,42 +1,30 @@
-# Import Active Directory module
+# This is a script that loads in Mock Data from a CSV file and populates an Active Directory with it.
+# The script is designed to be run on a Windows Server with the Active Directory Domain Services role installed.
+
+# Import the Active Directory module
+# Make sure the RSAT tools are installed on the server
 Import-Module ActiveDirectory
 
-# Function to create user accounts in Active Directory
-function Create-ADUser {
-    param(
-        [string]$Username,
-        [string]$Domain
-    )
-    
-    # Define user properties
-    $UserParams = @{
-        SamAccountName    = $Username
-        UserPrincipalName = "$Username@$Domain"
-        Name              = $Username
-        GivenName         = $Username
-        Surname           = "Lastname"  # Change as needed
-        AccountPassword   = (ConvertTo-SecureString -AsPlainText "Password123!" -Force)  # Set initial password
-        Enabled           = $true
+# Load the CSV file
+$users = Import-Csv -Path "C:\Users\jornt\Documents\Scripts\populateADScript\Usernames\MOCK_DATA.csv"
+$ADUsers = Get-ADUser -Filter * | Select-Object Name
+# Loop through each user in the CSV file
+foreach ($user in $users) {
+    # Create a new user object
+    $newUser = New-Object PSObject -Property @{
+        first_name = $user.first_name
+        last_name = $user.last_name
+        email = $user.email
     }
-
-    # Create user account
-    New-ADUser @UserParams -PassThru
+    Write-Output "Creating user $($newUser.first_name) with email address $($newUser.email)"
+    # Create the new user in Active Directory
+    # If user already exists, it will skip and say that the user already exists
+    if ( $ADUsers -eq $newUser.email ) {
+        Write-Output "User with email address $($newUser.email) already exists"
+    } else {
+    # If user does not exist, it will create the user
+        New-ADUser -Name "$($newUser.first_name + " " +  $newUser.last_name)" -GivenName $newUser.first_name -Surname $newUser.last_name -SamAccountName $newUser.email -UserPrincipalName "$($newUser.email)@example.com" -EmailAddress $newUser.email -Enabled $true -AccountPassword (ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force)
+    }
 }
-
-# Read randomized usernames from file
-$usernames = Get-Content -Path "..\UsernamesRandomized.txt"
-
-# Get domain name from user input
-$Domain = Read-Host "Enter your domain name (e.g., example.com)"
-
-#Check if domain name exists on domain controller
-$DomainExists = Get-ADDomain -Identity $Domain -ErrorAction SilentlyContinue
-
-# Create users in Active Directory
-foreach ($username in $usernames) {
-    # Trim leading/trailing whitespace and create user
-    $trimmedUsername = $username.Trim()
-    Create-ADUser -Username $trimmedUsername -Domain $Domain
-}
-
-Write-Host "User creation completed."
+# Show all created users
+Get-ADUser -Filter * | Format-Table Name, SamAccountName -A

@@ -27,7 +27,7 @@ foreach ($user in $users)
   } else
   {
     # If user does not exist, it will create the user
-    New-ADUser -Name "$($newUser.first_name + " " +  $newUser.last_name)" -GivenName $newUser.first_name -Surname $newUser.last_name -SamAccountName $newUser.email -UserPrincipalName "$($newUser.email)@example.com" -EmailAddress $newUser.email -Enabled $true -AccountPassword ( ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force)
+    New-ADUser -Name "$($newUser.first_name + " " +  $newUser.last_name)" -GivenName $newUser.first_name -Surname $newUser.last_name -SamAccountName $newUser.email -UserPrincipalName "$($newUser.email)@example.com" -EmailAddress $newUser.email -Enabled $true -AccountPassword  "P@ssword" 
   }
 }
 # Show all created users

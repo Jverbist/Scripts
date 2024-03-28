@@ -21,6 +21,7 @@ while while_bool == True:
         exec(open('Usernames\RandomizeUsernames.py', encoding='utf-8').read())
     elif user_input == "2":
         # Executes Powershell script that populates AD
+        subprocess.Popen('powershell -command Import-Module Microsoft.PowerShell.Security')
         subprocess.call(["C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "PowershellScripts\PopulateAD.ps1"])
     elif user_input == "3":
         while_bool = False

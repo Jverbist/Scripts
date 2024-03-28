@@ -8,22 +8,25 @@ Import-Module ActiveDirectory
 $users = Import-Csv -Path "C:\Users\jornt\Documents\Scripts\populateADScript\Usernames\MOCK_DATA.csv"
 $ADUsers = Get-ADUser -Filter * | Select-Object Name
 # Loop through each user in the CSV file
-foreach ($user in $users) {
-    # Create a new user object
-    $newUser = New-Object PSObject -Property @{
-        first_name = $user.first_name
-        last_name = $user.last_name
-        email = $user.email
-    }
-    Write-Output "Creating user $($newUser.first_name) with email address $($newUser.email)"
-    # Create the new user in Active Directory
-    # If user already exists, it will skip and say that the user already exists
-    if ( $ADUsers -eq $newUser.email ) {
-        Write-Output "User with email address $($newUser.email) already exists"
-    } else {
+foreach ($user in $users)
+{
+  # Create a new user object
+  $newUser = New-Object PSObject -Property @{
+    first_name = $user.first_name
+    last_name = $user.last_name
+    email = $user.email
+  }
+  Write-Output "Creating user $($newUser.first_name) with email address $($newUser.email)"
+  # Create the new user in Active Directory
+  # If user already exists, it will skip and say that the user already exists
+  if ( $ADUsers -eq $newUser.email )
+  {
+    Write-Output "User with email address $($newUser.email) already exists"
+  } else
+  {
     # If user does not exist, it will create the user
-        New-ADUser -Name "$($newUser.first_name + " " +  $newUser.last_name)" -GivenName $newUser.first_name -Surname $newUser.last_name -SamAccountName $newUser.email -UserPrincipalName "$($newUser.email)@example.com" -EmailAddress $newUser.email -Enabled $true -AccountPassword ( Microsoft.PowerShell.Commands.ConvertToSecureStringCommand "P@ssw0rd" -AsPlainText -Force) 
-    }
+    New-ADUser -Name "$($newUser.first_name + " " +  $newUser.last_name)" -GivenName $newUser.first_name -Surname $newUser.last_name -SamAccountName $newUser.email -UserPrincipalName "$($newUser.email)@example.com" -EmailAddress $newUser.email -Enabled $true -AccountPassword ( ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force) 
+  }
 }
 # Show all created users
 Get-ADUser -Filter * | Format-Table Name, SamAccountName -A

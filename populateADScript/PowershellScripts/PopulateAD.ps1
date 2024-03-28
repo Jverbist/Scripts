@@ -4,7 +4,7 @@
 # Import the Active Directory module
 # Make sure the RSAT tools are installed on the server
 Import-Module ActiveDirectory
-Install-Module Microsoft.PowerShell.Security
+Get-Module Microsoft.PowerShell.Security
 Import-Module Microsoft.PowerShell.Security
 # Load the CSV file
 $users = Import-Csv -Path "C:\Users\jornt\Documents\Scripts\populateADScript\Usernames\MOCK_DATA.csv"
